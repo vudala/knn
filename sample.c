@@ -12,10 +12,24 @@
 Sample* new_sample(short int label, float* attributes, unsigned int size)
 {
     Sample* s = (Sample*) malloc(sizeof(Sample));
+    must_alloc(s, __func__);
     s->label = label;
     s->attributes = attributes;
     s->atts_size = size;
     return s;
+}
+
+void free_sample(Sample* s)
+{
+    free(s->attributes);
+    free(s);
+}
+
+void free_sample_array(Sample** s, unsigned int size)
+{
+    for (unsigned int i = 0; i < size; i++)
+        free_sample(s[i]);
+    free(s);
 }
 
 
@@ -23,10 +37,10 @@ Sample* new_sample(short int label, float* attributes, unsigned int size)
 float clean_attr(char* str, char delim)
 {
     unsigned int i;
-    for (i = 0; str[i] == delim; i++);
+    for (i = 0; str[i] != delim; i++);
 
     // +1 pra compensar o indice
-    unsigned int new_size = strlen(str) - i + 1;
+    unsigned int new_size = strlen(str) - (i + 1);
     char* new_str = malloc(new_size);
     must_alloc(new_str, __func__);
 
@@ -35,6 +49,7 @@ float clean_attr(char* str, char delim)
 
     float r_value = atof(new_str);
     free(new_str);
+
     return r_value;
 }
 
@@ -42,9 +57,10 @@ float clean_attr(char* str, char delim)
 Sample* parse_sample(char* str)
 {
     short int label;
+    label = atoi(strtok(str, " "));
+
     float* atts = malloc(sizeof(float) * 132);
     must_alloc(atts, __func__);
-    label = atoi(strtok(str, " "));
 
     unsigned int i = 0;
     char* tok = strtok(NULL, " ");
@@ -55,6 +71,12 @@ Sample* parse_sample(char* str)
     }
 
     return new_sample(label, atts, 132);
+}
+
+
+void remove_nl(char* str)
+{
+    str[strlen(str) - 2] = '\0';
 }
 
 
@@ -79,6 +101,7 @@ Sample** read_samples(FILE* f, unsigned int* size)
         }
         
         fgets(buff, KBYTE * 2, f);
+        remove_nl(buff);
         samples[i] = parse_sample(buff);
         i++;
     }

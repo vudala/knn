@@ -1,3 +1,6 @@
+#ifndef SAMPLE_INCLUDED
+#define SAMPLE_INCLUDED
+
 // Descrição das amostras
 #include <stdio.h>
 struct sample {
@@ -7,6 +10,8 @@ struct sample {
 };
 typedef struct sample Sample; 
 
-Sample* new_sample(short int label, float* attributes, unsigned int atts_size);
+void free_sample_array(Sample** s, unsigned int size);
 
 Sample** read_samples(FILE* f, unsigned int* size);
+
+#endif
