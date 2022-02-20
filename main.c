@@ -29,14 +29,19 @@ int main(int argc, char** argv){
     unsigned int test_size = 0;
     Sample** test_samples = read_samples(f_test, &test_size);
 
+    test_size = (unsigned int) (test_size / 10);
+
     short int* predicted = predict(train_samples, train_size, test_samples, test_size, k_neighbors);
 
     float acc = accuracy(test_samples, predicted, test_size);
 
+    unsigned int labels_found = 0;
+    short int* tracker = extract_metadata(test_samples, test_size, &labels_found);
+
     printf("%f\n", acc);
 
-    // free_sample_array(train_samples, train_size);
-    // free_sample_array(test_samples, test_size);
+    free_sample_array(train_samples, train_size);
+    free_sample_array(test_samples, test_size);
     free(predicted);
     fclose(f_train);
     fclose(f_test);

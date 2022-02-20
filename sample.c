@@ -6,7 +6,8 @@
 #include <string.h>
 
 #define KBYTE 1024
-#define MEMORY_CHUNK 500 // Quantos bytes alocar a mais num realloc
+#define SAMPLES_MEMORY_CHUNK 500 // Quantos bytes alocar a mais num realloc
+#define LABELS_MEMORY_CHUNK  10
 
 
 Sample* new_sample(short int label, float* attributes, unsigned int size)
@@ -54,12 +55,12 @@ float clean_attr(char* str, char delim)
 }
 
 
-Sample* parse_sample(char* str)
+Sample* parse_sample(char* str, unsigned int attrs_n)
 {
     short int label;
     label = atoi(strtok(str, " "));
 
-    float* atts = malloc(sizeof(float) * 132);
+    float* atts = calloc(attrs_n, sizeof(float));
     must_alloc(atts, __func__);
 
     unsigned int i = 0;
@@ -70,7 +71,7 @@ Sample* parse_sample(char* str)
         tok = strtok(NULL, " ");
     }
 
-    return new_sample(label, atts, 132);
+    return new_sample(label, atts, attrs_n);
 }
 
 
@@ -80,29 +81,64 @@ void remove_nl(char* str)
 }
 
 
+// Extrai a quantidade de atributos das amostras
+unsigned int extract_attributes_n(FILE* f)
+{
+    char* buff = malloc(KBYTE * 2);
+    must_alloc(buff, __func__);
+
+    char* aux = malloc(KBYTE );
+    must_alloc(buff, __func__);
+
+    unsigned int i, j = 0;
+    if (!feof(f))
+    {
+        (void*) fgets(buff, KBYTE * 2, f);
+        for (i = strlen(buff); buff[i] != ':'; i--);
+        i--;
+        for (;buff[i] != ' '; i--)
+        {
+            aux[j] = buff[i];
+            j++;
+        }
+    }
+
+    rewind(f);
+    unsigned int r_value = atoi(str_reverse(aux));
+
+    free(buff);
+    free(aux);
+
+    return r_value;
+}
+
+
+// Lê a database e extrai as samples
 Sample** read_samples(FILE* f, unsigned int* size)
 {
+    unsigned int attrs_n = extract_attributes_n(f);
+
     char* buff = malloc(KBYTE * 2);
     must_alloc(buff, __func__);
 
     unsigned int i = 0;
     unsigned int chunk_mult = 1;
     
-    Sample** samples = malloc(sizeof(Sample*) * MEMORY_CHUNK * chunk_mult);
+    Sample** samples = malloc(sizeof(Sample*) * SAMPLES_MEMORY_CHUNK * chunk_mult);
     must_alloc(samples, __func__);
 
     while(!feof(f))
     {
-        if (i >= MEMORY_CHUNK * chunk_mult)
+        if (i >= SAMPLES_MEMORY_CHUNK * chunk_mult)
         {
             chunk_mult = chunk_mult << 2;
-            samples = (Sample**) realloc(samples, MEMORY_CHUNK * chunk_mult * sizeof(Sample*));
+            samples = (Sample**) realloc(samples, SAMPLES_MEMORY_CHUNK * chunk_mult * sizeof(Sample*));
             must_alloc(samples, __func__);
         }
-        
-        fgets(buff, KBYTE * 2, f);
+        (void*) fgets(buff, KBYTE * 2, f);
         remove_nl(buff);
-        samples[i] = parse_sample(buff);
+        samples[i] = parse_sample(buff, attrs_n);
+        
         i++;
     }
 
@@ -110,4 +146,39 @@ Sample** read_samples(FILE* f, unsigned int* size)
 
     *size = i - 1;
     return samples;
+}
+
+
+// Verifica se EL pertence a V
+int search(short int* v, unsigned int v_size, short int el)
+{
+    for (unsigned int i = 0; i < v_size; i++)
+        if (v[i] == el)
+            return 1;
+    return 0;
+}
+
+
+short int* extract_metadata(Sample** samples, unsigned int size, unsigned int* labels_found)
+{
+    unsigned int chunk_mult = 1;
+    short int* labels_tracker = malloc(sizeof(short int) * LABELS_MEMORY_CHUNK);
+    must_alloc(labels_tracker, __func__);
+
+    for (int i = 0; i < size; i++)
+        if (!search(labels_tracker, *labels_found, samples[i]->label))
+        {
+            if (*labels_found >= LABELS_MEMORY_CHUNK * chunk_mult)
+            {
+                chunk_mult = chunk_mult << 2;
+                labels_tracker = realloc(labels_tracker, LABELS_MEMORY_CHUNK * chunk_mult * sizeof(short int));
+                must_alloc(labels_tracker, __func__);
+            }
+            labels_tracker[*labels_found] = samples[i]->label;
+            *labels_found += 1;
+        }
+
+    printf("%d \n", *labels_found);
+
+    return labels_tracker;
 }

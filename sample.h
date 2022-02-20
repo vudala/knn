@@ -14,4 +14,6 @@ void free_sample_array(Sample** s, unsigned int size);
 
 Sample** read_samples(FILE* f, unsigned int* size);
 
+short int* extract_metadata(Sample** samples, unsigned int size, unsigned int* labels_found);
+
 #endif
