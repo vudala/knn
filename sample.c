@@ -8,6 +8,7 @@
 #define KBYTE 1024
 #define MEMORY_CHUNK 500 // Quantos bytes alocar a mais num realloc
 
+
 Sample* new_sample(short int label, float* attributes, unsigned int size)
 {
     Sample* s = (Sample*) malloc(sizeof(Sample));

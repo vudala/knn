@@ -13,7 +13,7 @@ all: $(OBJS)
 	$(CC) -c $(FLAGS) $<
 
 run: 
-	./$(OUTPUT) train_samples.txt test_samples.txt
+	./$(OUTPUT) train_samples.txt test_samples.txt 10
 
 clean:
 	@$(RM) $(OBJS)
