@@ -38,6 +38,8 @@ int main(int argc, char** argv){
     unsigned int labels_found = 0;
     short int* tracker = extract_metadata(test_samples, test_size, &labels_found);
 
+    confusion_matrix(test_samples, predicted, test_size, tracker, labels_found);
+
     printf("%f\n", acc);
 
     free_sample_array(train_samples, train_size);

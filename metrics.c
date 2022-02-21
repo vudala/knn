@@ -13,32 +13,45 @@ float accuracy(Sample** samples, short int* predicted, unsigned int size)
     return (float) hit / (float) size;
 }
 
-//Retorna o indice de EL se presente em V, caso contrário retorna -1
-// short int find(short int* v, short int el,  unsigned int size)
-// {
-//     for (unsigned int i = 0; i < size; i++)
-//         if (v[i] == el)
-//             return i;
-//     return -1;
-// }
 
-
-void confusion_matrix(Sample** test_samples, short int* predicted, unsigned int size)
+void print_matrix(unsigned int** m, unsigned int n, short int* labels_tracker, short int labels_found)
 {
-    unsigned int** mat = malloc(sizeof(int*));
+    printf("      ");
+    for (int i = 0; i < labels_found; i++)
+        printf("%5d ", labels_tracker[i]);
+    printf("\n");
+    for (int i = 0; i < labels_found; i++)
+        printf("_______");
+    printf("\n");
+
+    for (int i = 0; i < n; i++)
+    {
+        printf("%5d |", labels_tracker[i]);
+        for (int j = 0; j < n; j++)
+            printf("%5d ", m[i][j]);
+        printf("\n");
+    }
+}
+
+
+void confusion_matrix(Sample** test_samples, short int* predicted, unsigned int size, short int* labels_tracker, short int labels_found)
+{
+    unsigned int** mat = malloc(sizeof(int*) * labels_found);
     must_alloc(mat, __func__);
 
-    mat[0] = calloc(size, sizeof(int) * size);
+    mat[0] = calloc(size, sizeof(int) * labels_found * labels_found);
     must_alloc(mat[0], __func__);
 
     for (unsigned int i = 1; i < size; i++)
-        mat[i] = mat[0] + size * i * sizeof(int);
+        mat[i] = mat[0] + labels_found * i * sizeof(int);
 
     // short int pos = 0;
     for (int i = 0; i < size; i++)
     {
         mat[predicted[i]][test_samples[i]->label]++;
     }
+
+    print_matrix(mat, labels_found, labels_tracker, labels_found);
 
     free(mat[0]);
     free(mat);

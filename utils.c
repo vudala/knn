@@ -13,6 +13,7 @@ void must_alloc(void* ptr, const char* label)
     }
 }
 
+
 void must_open(FILE* f, const char* fname)
 {
     if (!f)
@@ -21,6 +22,7 @@ void must_open(FILE* f, const char* fname)
         exit(1);
     }
 }
+
 
 char* str_reverse(char* str)
 {
@@ -34,4 +36,10 @@ char* str_reverse(char* str)
         str[j] = aux;
     }
     return str;
+}
+
+
+void remove_nl(char* str)
+{
+    str[strlen(str) - 2] = '\0';
 }

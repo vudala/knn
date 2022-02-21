@@ -34,7 +34,7 @@ void free_sample_array(Sample** s, unsigned int size)
 }
 
 
-// Remove o NÚMERO: das carcterísticas da amostra e o retorna o valor em float
+// Remove o NÚMERO:VALOR das carcterísticas da amostra e o retorna o valor em float
 float clean_attr(char* str, char delim)
 {
     unsigned int i;
@@ -72,12 +72,6 @@ Sample* parse_sample(char* str, unsigned int attrs_n)
     }
 
     return new_sample(label, atts, attrs_n);
-}
-
-
-void remove_nl(char* str)
-{
-    str[strlen(str) - 2] = '\0';
 }
 
 
@@ -158,7 +152,7 @@ int search(short int* v, unsigned int v_size, short int el)
     return 0;
 }
 
-
+// Extrai quantos rótulos diferentes há e os retorna
 short int* extract_metadata(Sample** samples, unsigned int size, unsigned int* labels_found)
 {
     unsigned int chunk_mult = 1;
@@ -177,8 +171,6 @@ short int* extract_metadata(Sample** samples, unsigned int size, unsigned int* l
             labels_tracker[*labels_found] = samples[i]->label;
             *labels_found += 1;
         }
-
-    printf("%d \n", *labels_found);
 
     return labels_tracker;
 }
