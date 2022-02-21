@@ -5,8 +5,6 @@
 #include <math.h>
 #include <float.h>
 
-#include <omp.h>
-
 
 // Retorna o índice da maior distância caso haja alguma maior que dist, se não houver retorna -1
 int find_greater(float* distances, unsigned int size, float* dist)

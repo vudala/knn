@@ -1,7 +1,7 @@
 
 CC=gcc
 FLAGS=-Wall -O3 -g
-LIBS=-fopenmp -lm
+LIBS=-lm
 SRC=$(wildcard *.c)
 OBJS=$(subst .c,.o,$(SRC))
 OUTPUT=knn
