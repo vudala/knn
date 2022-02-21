@@ -8,7 +8,7 @@ void must_alloc(void* ptr, const char* label)
 {
     if (!ptr)
     {
-        fprintf(stderr, "Falha a alocar memória em: %s", label);
+        fprintf(stderr, "Falha a alocar memória em: %s\n", label);
         exit(1);
     }
 }
