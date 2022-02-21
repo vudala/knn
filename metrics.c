@@ -36,20 +36,17 @@ void print_matrix(unsigned int** m, unsigned int n, short int* labels_tracker, s
 
 void confusion_matrix(Sample** test_samples, short int* predicted, unsigned int size, short int* labels_tracker, short int labels_found)
 {
-    unsigned int** mat = malloc(sizeof(int*) * labels_found);
+    unsigned int** mat = malloc(sizeof(unsigned int*) * labels_found);
     must_alloc(mat, __func__);
 
-    mat[0] = calloc(size, sizeof(int) * labels_found * labels_found);
+    mat[0] = calloc(labels_found * labels_found, sizeof(unsigned int));
     must_alloc(mat[0], __func__);
 
-    for (unsigned int i = 1; i < size; i++)
-        mat[i] = mat[0] + labels_found * i * sizeof(int);
+    for (unsigned int i = 1; i < labels_found; i++)
+        mat[i] = mat[0] + i * labels_found;
 
-    // short int pos = 0;
     for (int i = 0; i < size; i++)
-    {
         mat[predicted[i]][test_samples[i]->label]++;
-    }
 
     print_matrix(mat, labels_found, labels_tracker, labels_found);
 

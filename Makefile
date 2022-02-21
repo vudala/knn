@@ -1,6 +1,6 @@
 
 CC=gcc
-FLAGS=-Wall -O3
+FLAGS=-Wall -O3 -g
 LIBS=-fopenmp -lm
 SRC=$(wildcard *.c)
 OBJS=$(subst .c,.o,$(SRC))
@@ -11,7 +11,7 @@ all: $(OBJS)
 	$(CC) $(FLAGS) $(OBJS) -o $(OUTPUT) $(LIBS)
 
 %.o: %.c
-	$(CC) -c $(FLAGS) $< $(LIBS)
+	$(CC) $(FLAGS) -c $< $(LIBS)
 
 run: 
 	./$(OUTPUT) train_samples.txt test_samples.txt 3

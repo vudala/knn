@@ -41,5 +41,7 @@ char* str_reverse(char* str)
 
 void remove_nl(char* str)
 {
-    str[strlen(str) - 2] = '\0';
+    unsigned int len = strlen(str);
+    if ( len > 0 && str[len - 1] == '\n' )
+        str[len - 1] = '\0';
 }

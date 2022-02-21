@@ -20,11 +20,13 @@ Sample* new_sample(short int label, float* attributes, unsigned int size)
     return s;
 }
 
+
 void free_sample(Sample* s)
 {
     free(s->attributes);
     free(s);
 }
+
 
 void free_sample_array(Sample** s, unsigned int size)
 {
@@ -41,7 +43,7 @@ float clean_attr(char* str, char delim)
     for (i = 0; str[i] != delim; i++);
 
     // +1 pra compensar o indice
-    unsigned int new_size = strlen(str) - (i + 1);
+    unsigned int new_size = strlen(str) - i;
     char* new_str = malloc(new_size);
     must_alloc(new_str, __func__);
 
@@ -151,6 +153,7 @@ int search(short int* v, unsigned int v_size, short int el)
             return 1;
     return 0;
 }
+
 
 // Extrai quantos rótulos diferentes há e os retorna
 short int* extract_metadata(Sample** samples, unsigned int size, unsigned int* labels_found)
