@@ -132,12 +132,15 @@ short int* predict(Sample** train_samples, unsigned int train_size, Sample** tes
     short int* predicted = malloc(sizeof(short int) * test_size);
     must_alloc(predicted, __func__);
 
-    Sample** nrst = NULL;
-    
-    for (unsigned int i = 0; i < test_size; i++)
+    #pragma omp parallel
     {
-        nrst = nearest(train_samples, train_size, test_samples[i], k_neighbors);
-        predicted[i] = predominant_label(nrst, k_neighbors);
+        Sample** nrst = NULL;
+        #pragma omp for schedule(static, 8)
+        for (unsigned int i = 0; i < test_size; i++)
+        {
+            nrst = nearest(train_samples, train_size, test_samples[i], k_neighbors);
+            predicted[i] = predominant_label(nrst, k_neighbors);
+        }
     }
 
     return predicted;
