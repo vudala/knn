@@ -95,7 +95,7 @@ short int greater(short int* v, unsigned int size)
 // Retorna a label predominante entre aquelas samples
 short int predominant_label(Sample** samples, unsigned int size)
 {
-    short int* count = malloc(sizeof(short int) * size);
+    short int* count = calloc(size, sizeof(short int));
     must_alloc(count, __func__);
 
     short int* found = malloc(sizeof(short int) * size);
@@ -107,14 +107,13 @@ short int predominant_label(Sample** samples, unsigned int size)
     for (unsigned int i = 0; i < size; i++)
     {
         f = find(found, pos, samples[i]->label);
-
         if (f > -1)
-            count[f]++;
+            count[f] += 1;
         else
         {
             found[pos] = samples[i]->label;
-            count[pos]++;
-            pos++;
+            count[pos] = 1;
+            pos += 1;
         }
     }
     
@@ -140,6 +139,7 @@ short int* predict(Sample** train_samples, unsigned int train_size, Sample** tes
         {
             nrst = nearest(train_samples, train_size, test_samples[i], k_neighbors);
             predicted[i] = predominant_label(nrst, k_neighbors);
+            free(nrst);
         }
     }
 
