@@ -1,6 +1,6 @@
 
 CC=gcc
-FLAGS=-Wall -O3 -g
+FLAGS=-O3
 LIBS=-lm
 SRC=$(wildcard *.c)
 OBJS=$(subst .c,.o,$(SRC))
