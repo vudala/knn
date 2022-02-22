@@ -93,7 +93,7 @@ short int greater(short int* v, unsigned int size)
 // Retorna a label predominante entre aquelas samples
 short int predominant_label(Sample** samples, unsigned int size)
 {
-    short int* count = malloc(sizeof(short int) * size);
+    short int* count = calloc(size, sizeof(short int));
     must_alloc(count, __func__);
 
     short int* found = malloc(sizeof(short int) * size);
