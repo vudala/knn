@@ -83,7 +83,7 @@ unsigned int extract_attributes_n(FILE* f)
     char* buff = malloc(KBYTE * 2);
     must_alloc(buff, __func__);
 
-    char* aux = malloc(KBYTE );
+    char* aux = malloc(KBYTE * 2);
     must_alloc(buff, __func__);
 
     unsigned int i, j = 0;
@@ -140,7 +140,7 @@ Sample** read_samples(FILE* f, unsigned int* size)
 
     free(buff);
 
-    *size = i - 1;
+    *size = i;
     return samples;
 }
 
