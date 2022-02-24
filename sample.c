@@ -140,7 +140,7 @@ Sample** read_samples(FILE* f, unsigned int* size)
 
     free(buff);
 
-    *size = i - 1;
+    *size = i;
     return samples;
 }
 
