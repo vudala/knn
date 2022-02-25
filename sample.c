@@ -89,7 +89,9 @@ unsigned int extract_attributes_n(FILE* f)
     unsigned int i, j = 0;
     if (!feof(f))
     {
-        (void*) fgets(buff, KBYTE * 2, f);
+        if (!fgets(buff, KBYTE * 2, f))
+            throw_exception(__func__);
+            
         for (i = strlen(buff); buff[i] != ':'; i--);
         i--;
         for (;buff[i] != ' '; i--)
@@ -131,7 +133,10 @@ Sample** read_samples(FILE* f, unsigned int* size)
             samples = (Sample**) realloc(samples, SAMPLES_MEMORY_CHUNK * chunk_mult * sizeof(Sample*));
             must_alloc(samples, __func__);
         }
-        (void*) fgets(buff, KBYTE * 2, f);
+
+        if(!fgets(buff, KBYTE * 2, f))
+            throw_exception(__func__);
+
         remove_nl(buff);
         samples[i] = parse_sample(buff, attrs_n);
         

@@ -24,6 +24,13 @@ void must_open(FILE* f, const char* fname)
 }
 
 
+void throw_exception(const char* func)
+{
+    fprintf(stderr, "Algum erro inesperado aconteceu durante a execução em %s", func);
+    exit(1);
+}
+
+
 char* str_reverse(char* str)
 {
     char aux;
