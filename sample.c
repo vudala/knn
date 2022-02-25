@@ -125,7 +125,7 @@ Sample** read_samples(FILE* f, unsigned int* size)
     Sample** samples = malloc(sizeof(Sample*) * SAMPLES_MEMORY_CHUNK * chunk_mult);
     must_alloc(samples, __func__);
 
-    while(!feof(f))
+    while(fgets(buff, KBYTE * 2, f))
     {
         if (i >= SAMPLES_MEMORY_CHUNK * chunk_mult)
         {
@@ -133,9 +133,6 @@ Sample** read_samples(FILE* f, unsigned int* size)
             samples = (Sample**) realloc(samples, SAMPLES_MEMORY_CHUNK * chunk_mult * sizeof(Sample*));
             must_alloc(samples, __func__);
         }
-
-        if(!fgets(buff, KBYTE * 2, f))
-            throw_exception(__func__);
 
         remove_nl(buff);
         samples[i] = parse_sample(buff, attrs_n);

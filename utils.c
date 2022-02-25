@@ -26,7 +26,7 @@ void must_open(FILE* f, const char* fname)
 
 void throw_exception(const char* func)
 {
-    fprintf(stderr, "Algum erro inesperado aconteceu durante a execução em %s", func);
+    fprintf(stderr, "Algum erro inesperado aconteceu durante a execução em %s\n", func);
     exit(1);
 }
 
