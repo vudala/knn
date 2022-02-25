@@ -40,7 +40,7 @@ int main(int argc, char** argv){
     float acc = accuracy(test_samples, predicted, test_size);
     printf("Acurácia: %f\n", acc);
     
-    printf("Matriz de confusão: \n");
+    printf("Matriz de confusão (linhas = rótulo real, colunas = rótulo predito) \n");
     confusion_matrix(test_samples, predicted, test_size, tracker, labels_found);
 
     free_sample_array(train_samples, train_size);
