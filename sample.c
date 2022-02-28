@@ -42,7 +42,6 @@ float clean_attr(char* str, char delim)
     unsigned int i;
     for (i = 0; str[i] != delim; i++);
 
-    // +1 pra compensar o indice
     unsigned int new_size = strlen(str) - i;
     char* new_str = malloc(new_size);
     must_alloc(new_str, __func__);
@@ -57,6 +56,7 @@ float clean_attr(char* str, char delim)
 }
 
 
+// Processa uma string contendo as informações de uma amostra e retorna uma amostra nova
 Sample* parse_sample(char* str, unsigned int attrs_n)
 {
     short int label;
