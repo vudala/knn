@@ -33,6 +33,7 @@ void print_matrix(unsigned int** m, unsigned int n, short int* labels_tracker, s
     }
 }
 
+
 short int index_of(short int* v, short int size, short int el)
 {
     for (unsigned int i = 0; i < size; i++)
@@ -40,6 +41,7 @@ short int index_of(short int* v, short int size, short int el)
             return i;
     return -1;
 }
+
 
 void confusion_matrix(Sample** test_samples, short int* predicted, unsigned int size, short int* labels_tracker, short int labels_found)
 {

@@ -57,6 +57,7 @@ float clean_attr(char* str, char delim)
 }
 
 
+// Separa um string contendo a amostra e cria um novo struct Sample a partir da string
 Sample* parse_sample(char* str, unsigned int attrs_n)
 {
     short int label;
